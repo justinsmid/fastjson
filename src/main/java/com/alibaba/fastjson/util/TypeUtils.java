@@ -1729,7 +1729,6 @@ public class TypeUtils{
                 return clazz;
             }
         } catch(Throwable e){
-            e.printStackTrace();
             // skip
         }
         try{
@@ -3089,7 +3088,6 @@ public class TypeUtils{
             }
             return names;
         } catch(Throwable e){
-            e.printStackTrace();
             kotlin_error = true;
         }
         return null;
