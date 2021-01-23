@@ -141,16 +141,16 @@ public class Jdk8DateCodec extends ContextObjectDeserializer implements ObjectSe
 
                 if (formatter == null) {
                     if (text.length() <= 19) {
-                        JSONScanner s = new JSONScanner(text);
-                        TimeZone timeZone = parser.lexer.getTimeZone();
-                        s.setTimeZone(timeZone);
-                        boolean match = s.scanISO8601DateIfMatch(false);
-                        if (match) {
-                            Date date = s.getCalendar().getTime();
-                            return (T) ZonedDateTime.ofInstant(date.toInstant(), timeZone.toZoneId());
+                        try (JSONScanner s = new JSONScanner(text)) {
+                            TimeZone timeZone = parser.lexer.getTimeZone();
+                            s.setTimeZone(timeZone);
+                            boolean match = s.scanISO8601DateIfMatch(false);
+                            if (match) {
+                                Date date = s.getCalendar().getTime();
+                                return (T) ZonedDateTime.ofInstant(date.toInstant(), timeZone.toZoneId());
+                            }
                         }
                     }
-
                 }
 
                 ZonedDateTime zonedDateTime = parseZonedDateTime(text, formatter);
@@ -337,23 +337,24 @@ public class Jdk8DateCodec extends ContextObjectDeserializer implements ObjectSe
         }
 
         if (formatter == null) {
-            JSONScanner dateScanner = new JSONScanner(text);
-            if (dateScanner.scanISO8601DateIfMatch(false)) {
-                Instant instant = dateScanner.getCalendar().toInstant();
-                return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-            }
-
-            boolean digit = true;
-            for (int i = 0; i < text.length(); ++i) {
-                char ch = text.charAt(i);
-                if (ch < '0' || ch > '9') {
-                    digit = false;
-                    break;
+            try (JSONScanner dateScanner = new JSONScanner(text)) {
+                if (dateScanner.scanISO8601DateIfMatch(false)) {
+                    Instant instant = dateScanner.getCalendar().toInstant();
+                    return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
                 }
-            }
-            if (digit && text.length() > 8 && text.length() < 19) {
-                long epochMillis = Long.parseLong(text);
-                return LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), JSON.defaultTimeZone.toZoneId());
+
+                boolean digit = true;
+                for (int i = 0; i < text.length(); ++i) {
+                    char ch = text.charAt(i);
+                    if (ch < '0' || ch > '9') {
+                        digit = false;
+                        break;
+                    }
+                }
+                if (digit && text.length() > 8 && text.length() < 19) {
+                    long epochMillis = Long.parseLong(text);
+                    return LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), JSON.defaultTimeZone.toZoneId());
+                }
             }
         }
 

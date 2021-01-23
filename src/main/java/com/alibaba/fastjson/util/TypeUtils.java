@@ -603,11 +603,12 @@ public class TypeUtils{
             if(isNumber(strVal)){
                 longValue = Long.parseLong(strVal);
             } else{
-                JSONScanner scanner = new JSONScanner(strVal);
-                if(scanner.scanISO8601DateIfMatch(false)){
-                    longValue = scanner.getCalendar().getTime().getTime();
-                } else{
-                    throw new JSONException("can not cast to Timestamp, value : " + strVal);
+                try (JSONScanner scanner = new JSONScanner(strVal)) {
+                    if(scanner.scanISO8601DateIfMatch(false)){
+                        longValue = scanner.getCalendar().getTime().getTime();
+                    } else{
+                        throw new JSONException("can not cast to Timestamp, value : " + strVal);
+                    }
                 }
             }
         }
@@ -655,11 +656,12 @@ public class TypeUtils{
             if(isNumber(strVal)){
                 longValue = Long.parseLong(strVal);
             } else{
-                JSONScanner scanner = new JSONScanner(strVal);
-                if(scanner.scanISO8601DateIfMatch(false)){
-                    longValue = scanner.getCalendar().getTime().getTime();
-                } else{
-                    throw new JSONException("can not cast to Timestamp, value : " + strVal);
+                try (JSONScanner scanner = new JSONScanner(strVal)) {
+                    if(scanner.scanISO8601DateIfMatch(false)){
+                        longValue = scanner.getCalendar().getTime().getTime();
+                    } else{
+                        throw new JSONException("can not cast to Timestamp, value : " + strVal);
+                    }
                 }
             }
         }
@@ -744,11 +746,12 @@ public class TypeUtils{
             if(isNumber(strVal)){
                 longValue = Long.parseLong(strVal);
             } else {
-                JSONScanner scanner = new JSONScanner(strVal);
-                if(scanner.scanISO8601DateIfMatch(false)){
-                    longValue = scanner.getCalendar().getTime().getTime();
-                } else{
-                    throw new JSONException("can not cast to Timestamp, value : " + strVal);
+                try (JSONScanner scanner = new JSONScanner(strVal)) {
+                    if(scanner.scanISO8601DateIfMatch(false)){
+                        longValue = scanner.getCalendar().getTime().getTime();
+                    } else{
+                        throw new JSONException("can not cast to Timestamp, value : " + strVal);
+                    }
                 }
             }
         }
