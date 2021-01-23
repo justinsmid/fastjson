@@ -44,6 +44,7 @@ import com.alibaba.fastjson.util.IOUtils;
 import com.alibaba.fastjson.util.TypeUtils;
 import org.w3c.dom.Node;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -169,6 +170,8 @@ public class MiscCodec implements ObjectSerializer, ObjectDeserializer {
     private static String toString(org.w3c.dom.Node node) {
         try {
             TransformerFactory transFactory = TransformerFactory.newInstance();
+            transFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            transFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
             Transformer transformer = transFactory.newTransformer();
             DOMSource domSource = new DOMSource(node);
 
