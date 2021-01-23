@@ -15,7 +15,6 @@ public class Issue79 extends TestCase {
         Assert.assertNotNull(result.present);
         Assert.assertNotNull(result.present.records);
         Assert.assertNotNull(result.present.records.get(0));
-        Assert.assertNotNull(result.present.records.get(0) instanceof PresentRecord);
     }
 
     public static class SearchResult {
